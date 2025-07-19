@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOCO - Versión Final</title>
+    
+    <!-- Metadatos para PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0C0A1A">
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png">
+    
+    <!-- Scripts y Fuentes Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Hoja de Estilos Propia -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Vista de Configuración Inicial -->
+    <section id="setup-view">
+        <div class="w-full max-w-xl text-center">
+            <h1 class="font-heading text-4xl md:text-6xl uppercase mb-4 text-white">¡Bienvenido/a a FOCO by VitreumStudios!</h1>
+            <p class="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-secondary">Para empezar, dinos cómo te llamas.</p>
+            <form id="setup-form" class="w-full max-w-sm mx-auto">
+                <input type="text" id="username-input" class="input-field text-center text-2xl mb-8" placeholder="Escribe tu nombre aquí..." required>
+                <button type="submit" class="btn btn-primary w-full text-xl md:text-2xl">COMENZAR</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Interfaz Principal de la App -->
+    <div id="main-app-ui" class="w-full h-full" style="display: none;">
+        <!-- Contenedor Principal de Vistas con Scroll Snap -->
+        <main id="app-container" class="w-full h-full">
+            <!-- Vista: Dashboard -->
+            <section id="dashboard-view" data-nav-name="Inicio" class="view">
+                <div class="view-content">
+                    <div class="glass-pane glass-pane-light p-4 md:p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h1 id="greeting-text" class="font-heading text-2xl md:text-4xl uppercase"></h1>
+                                <p id="dashboard-summary" class="text-secondary text-base md:text-lg mt-1"></p>
+                            </div>
+                            <div id="streak-container" class="text-center flex-shrink-0 ml-4">
+                                <span class="text-3xl md:text-4xl">🔥</span>
+                                <p id="streak-text" class="font-bold text-base md:text-lg">0 días</p>
+                            </div>
+                        </div>
+                        <p id="motivational-quote" class="mt-4 italic text-secondary text-sm md:text-base"></p>
+                        <div class="mt-6">
+                            <button id="dashboard-zen-btn" class="btn btn-primary w-full md:w-auto flex items-center justify-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3.87v16.26M16 3.87v16.26M3.87 8h16.26M3.87 16h16.26M12 2v20"></path></svg>
+                                Iniciar Sesión Zen
+                            </button>
+                        </div>
+                    </div>
+                    <div id="todays-schedule-section" class="w-full"><h2 class="font-heading text-xl md:text-2xl uppercase mb-4 ml-2 text-on-bg">Clases de Hoy</h2><div id="todays-schedule-container" class="space-y-4"></div></div>
+                    <div id="focus-card-section" class="w-full"><h2 class="font-heading text-xl md:text-2xl uppercase mb-4 ml-2 text-on-bg">Enfoque Principal</h2><div id="focus-card-container"></div></div>
+                    <div id="pending-tasks-section" class="w-full"><div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 ml-2 gap-4"><h2 class="font-heading text-xl md:text-2xl uppercase text-on-bg">Próximas Tareas</h2><div id="task-filters" class="flex items-center gap-2 flex-wrap"></div></div><div id="pending-tasks-container" class="space-y-4"></div></div>
+                    <div id="completed-tasks-section" class="w-full mt-6"><h2 class="font-heading text-xl md:text-2xl uppercase mb-4 ml-2 text-on-bg">Tareas Completadas</h2><div id="completed-tasks-container" class="space-y-4"></div></div>
+                </div>
+                 <a href="#schedule-view" class="scroll-arrow"><span>Horario</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg></a>
+            </section>
+
+            <!-- Vista: Horario -->
+            <section id="schedule-view" data-nav-name="Horario" class="view">
+                <div class="view-content">
+                    <div class="glass-pane p-4 md:p-6 w-full">
+                        <div id="schedule-display">
+                            <header class="flex justify-between items-center mb-8"><h1 class="font-heading text-2xl md:text-4xl uppercase">Horario</h1><button id="add-subject-btn" class="btn btn-primary flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Añadir</button></header>
+                            <div id="schedule-list-container" class="space-y-8"></div>
+                        </div>
+                        <div id="subject-form-container" style="display: none;">
+                            <header class="flex justify-between items-center mb-6"><h1 id="subject-form-title" class="font-heading text-2xl md:text-4xl uppercase"></h1><button id="cancel-subject-form-btn" class="btn">Cancelar</button></header>
+                            <form id="subject-form" class="space-y-6"><input type="hidden" id="subject-id-input"><div><label for="subject-name" class="font-bold block mb-2">Nombre Materia *</label><input type="text" id="subject-name" class="input-field" required></div><div><label for="subject-day" class="font-bold block mb-2">Día *</label><select id="subject-day" class="input-field" required><option value="1">Lunes</option><option value="2">Martes</option><option value="3">Miércoles</option><option value="4">Jueves</option><option value="5">Viernes</option><option value="6">Sábado</option><option value="0">Domingo</option></select></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label for="subject-start-time" class="font-bold block mb-2">Hora Inicio *</label><input type="time" id="subject-start-time" class="input-field" required></div><div><label for="subject-end-time" class="font-bold block mb-2">Hora Fin *</label><input type="time" id="subject-end-time" class="input-field" required></div></div><button type="submit" id="save-subject-btn" class="w-full btn btn-primary text-xl"></button></form>
+                        </div>
+                    </div>
+                </div>
+                <a href="#calendar-view" class="scroll-arrow"><span>Calendario</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg></a>
+            </section>
+
+            <!-- Vista: Calendario -->
+            <section id="calendar-view" data-nav-name="Calendario" class="view">
+                <div class="view-content">
+                    <div class="glass-pane p-4 md:p-6 w-full">
+                        <header class="flex justify-between items-center mb-6"><h1 id="calendar-title" class="font-heading text-2xl md:text-3xl uppercase"></h1><div class="flex items-center gap-2"><button id="calendar-prev-month-btn" class="btn btn-icon"><</button><button id="calendar-next-month-btn" class="btn btn-icon">></button></div></header>
+                        <div id="calendar-grid" class="mb-4"></div>
+                        <div id="calendar-tasks-list"><h3 class="font-heading text-xl uppercase mb-2">Tareas del día:</h3><div id="calendar-tasks-container" class="space-y-2"><p class="text-secondary">Selecciona un día para ver las tareas.</p></div></div>
+                    </div>
+                </div>
+                <a href="#settings-view" class="scroll-arrow"><span>Ajustes</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m7 10 5 5 5-5"/></svg></a>
+            </section>
+            
+            <!-- Vista: Ajustes -->
+            <section id="settings-view" data-nav-name="Ajustes" class="view">
+                <div class="view-content">
+                    <div class="glass-pane p-4 md:p-6 w-full space-y-8"><h1 class="font-heading text-3xl uppercase">Configuración</h1><div id="zen-settings-section"><h2 class="font-heading text-2xl uppercase mb-4">Modo Zen</h2><div class="space-y-4"><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div><label for="zen-pomodoro-duration" class="font-bold block mb-2">Enfoque (min)</label><input type="number" id="zen-pomodoro-duration" class="input-field" min="1"></div><div><label for="zen-short-break-duration" class="font-bold block mb-2">Descanso Corto (min)</label><input type="number" id="zen-short-break-duration" class="input-field" min="1"></div><div><label for="zen-long-break-duration" class="font-bold block mb-2">Descanso Largo (min)</label><input type="number" id="zen-long-break-duration" class="input-field" min="1"></div></div></div></div><div id="appearance-section"><h2 class="font-heading text-2xl uppercase mb-4">Apariencia</h2><div class="space-y-4"><div><label for="color-picker" class="font-bold block mb-2">Color de Acento</label><input type="color" id="color-picker" class="input-field h-12"></div><div><label for="wallpaper-url-input" class="font-bold block mb-2">Fondo desde URL</label><div class="flex gap-2"><input type="text" id="wallpaper-url-input" class="input-field flex-1" placeholder="https://..."><button id="save-wallpaper-url-btn" class="btn">Guardar</button></div></div><div><label for="wallpaper-file-input" class="font-bold block mb-2">Fondo desde archivo</label><input type="file" id="wallpaper-file-input" accept="image/*" class="input-field"></div><button id="reset-wallpaper-btn" class="w-full md:w-auto btn">Restaurar fondo</button></div></div><div><h2 class="font-heading text-2xl uppercase mb-4">Copia de Seguridad</h2><div class="flex flex-col md:flex-row gap-4"><button id="export-btn" class="flex-1 btn">Exportar</button><button id="import-btn" class="flex-1 btn">Importar</button></div><input type="file" id="import-file-input" accept=".foco,.json" class="hidden"></div><div><h2 class="font-heading text-2xl uppercase mb-4" style="color: var(--danger-color);">Zona de Peligro</h2><button id="reset-app-btn" class="w-full btn btn-danger font-bold text-lg">Reiniciar Aplicación</button></div></div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Botón Flotante para Añadir Tarea -->
+        <button id="fab-add-task" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        
+        <!-- Vistas Ocultas (Modales/Popups) -->
+        <div id="hidden-views-container">
+            <section id="details-view" class="view hidden-view"><div class="glass-pane p-4 md:p-6 w-full max-w-4xl"><header class="flex justify-between items-center mb-6 pb-4 border-b-2 border-white/20 flex-wrap gap-2"><button id="back-to-dashboard-btn" class="btn flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>Volver</button><div class="flex gap-2"><button id="start-zen-session-btn" class="btn btn-primary flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M12 6v6l4 2"/></svg>Sesión Zen</button><button id="edit-task-btn" class="btn flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Editar</button></div></header><div id="task-details-content"></div></div></section>
+            <section id="form-view" class="view hidden-view"><div class="glass-pane p-4 md:p-6 max-w-3xl w-full"><header class="flex justify-between items-center mb-6"><h1 id="form-title" class="font-heading text-3xl md:text-4xl uppercase"></h1><button id="cancel-form-btn" class="btn">Cancelar</button></header><form id="task-form" class="space-y-6"><input type="hidden" id="task-id-input"><div><label for="task-title" class="font-bold block mb-2">Título *</label><input type="text" id="task-title" class="input-field" required></div><div><label for="task-description" class="font-bold block mb-2">Descripción</label><textarea id="task-description" rows="4" class="input-field"></textarea></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div><label for="task-due-date" class="font-bold block mb-2">Fecha</label><input type="datetime-local" id="task-due-date" class="input-field"></div><div><label for="task-priority" class="font-bold block mb-2">Prioridad</label><select id="task-priority" class="input-field"><option value="low">Baja</option><option value="medium" selected>Media</option><option value="high">Alta</option></select></div></div><div><label for="task-tags" class="font-bold block mb-2">Etiquetas</label><input type="text" id="task-tags" class="input-field" placeholder="#universidad, #personal..."></div><div><h3 class="font-bold mb-2">Subtareas</h3><div id="subtasks-form-list" class="space-y-2 mb-3"></div><button type="button" id="add-subtask-form-btn" class="btn text-sm">+ Añadir subtarea</button></div><button type="submit" id="save-task-btn" class="w-full btn btn-primary text-xl"></button></form></div></section>
+            <section id="grades-view" class="view hidden-view"><div class="glass-pane p-4 md:p-6 w-full max-w-4xl"><header class="flex justify-between items-center mb-6 pb-4 border-b-2 border-white/20 flex-wrap gap-2"><button id="back-to-schedule-btn" class="btn flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>Volver</button><div class="flex gap-2"><button id="edit-subject-grades-btn" class="btn flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>Editar Materia</button></div></header><div id="grades-content" class="space-y-8"><div class="text-center"><h1 id="grades-subject-title" class="font-heading text-3xl md:text-5xl uppercase mb-2"></h1><p id="grades-average" class="text-2xl font-bold text-secondary"></p></div><div id="grades-list-container" class="space-y-4"></div><button id="add-grade-btn" class="btn btn-primary w-full text-xl"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" class="inline-block mr-2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>Añadir Calificación</button></div></div></section>
+        </div>
+    </div>
+
+    <!-- Vista: Modo Zen -->
+    <section id="zen-view" class="view">
+        <canvas id="zen-canvas"></canvas>
+        <div id="zen-border-clock">
+            <div id="border-top" class="border-segment"></div>
+            <div id="border-right" class="border-segment"></div>
+            <div id="border-bottom" class="border-segment"></div>
+            <div id="border-left" class="border-segment"></div>
+        </div>
+        <div id="zen-timer-container" class="relative flex flex-col items-center justify-center">
+            <svg id="zen-progress-svg" class="absolute inset-0 w-full h-full">
+                <circle id="zen-progress-bg" stroke="rgba(255,255,255,0.15)" stroke-width="12" fill="transparent" />
+                <circle id="zen-progress-ring" stroke="var(--accent-primary)" stroke-width="12" fill="transparent" stroke-linecap="round" />
+            </svg>
+            <div class="relative">
+                <h1 id="zen-timer-display" class="font-heading text-8xl md:text-9xl">25:00</h1>
+                <p id="zen-status-text" class="text-2xl text-secondary uppercase tracking-widest text-center">ENFOQUE</p>
+            </div>
+        </div>
+        <div id="zen-controls">
+            <div id="zen-sound-controls" class="relative">
+                <button class="btn btn-icon w-16 h-16"><svg id="zen-sound-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></button>
+                <div id="zen-sound-popup" class="glass-pane">
+                    <div id="zen-sound-selector" class="space-y-2 mb-4"></div>
+                    <input type="range" id="zen-volume-slider" min="0" max="1" step="0.05" value="0.5" class="w-full">
+                </div>
+            </div>
+            <button id="exit-zen-btn" class="btn btn-danger btn-icon w-16 h-16"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <audio id="audio-rain" src="https://www.soundjay.com/nature/rain-light-2.mp3" loop></audio>
+        <audio id="audio-forest" src="https://www.soundjay.com/nature/forest-reverb-1.mp3" loop></audio>
+        <audio id="audio-whitenoise" src="https://www.soundjay.com/nature/white-noise-1.mp3" loop></audio>
+    </section>
+    
+    <!-- Modales y Notificaciones -->
+    <div id="subtask-modal" class="modal-overlay"><div class="modal-content glass-pane w-11/12 max-w-md p-6"><h2 class="font-heading text-2xl uppercase mb-4">Añadir Subtarea</h2><input type="text" id="subtask-input" class="input-field mb-4" placeholder="Descripción..."><div class="flex gap-4"><button id="confirm-add-subtask-btn" class="flex-1 btn btn-primary">Añadir</button><button id="cancel-add-subtask-btn" class="flex-1 btn">Cancelar</button></div></div></div>
+    <div id="confirm-zen-log-modal" class="modal-overlay"><div id="confirm-zen-log-content" class="modal-content glass-pane w-11/12 max-w-md p-6 text-center"></div></div>
+    <div id="achievement-toast" class="glass-pane"><div id="achievement-toast-content" class="flex items-center gap-4 text-primary"></div></div>
+    <div id="add-grade-modal" class="modal-overlay">
+        <div class="modal-content glass-pane w-11/12 max-w-md p-6">
+            <h2 class="font-heading text-2xl uppercase mb-4">Añadir Calificación</h2>
+            <form id="add-grade-form" class="space-y-4">
+                <div>
+                    <label for="grade-name-input" class="font-bold block mb-2">Descripción</label>
+                    <input type="text" id="grade-name-input" class="input-field" placeholder="Ej: Examen Parcial 1" required>
+                </div>
+                <div>
+                    <label for="grade-value-input" class="font-bold block mb-2">Calificación</label>
+                    <input type="number" id="grade-value-input" class="input-field" placeholder="Ej: 8.5" step="0.1" required>
+                </div>
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="flex-1 btn btn-primary">Añadir</button>
+                    <button type="button" id="cancel-add-grade-btn" class="flex-1 btn">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Principal de la App -->
+    <script src="script.js" defer></script>
+</body>
+</html>

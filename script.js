@@ -234,13 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
 
                     const id = entry.target.id;
-                    if (id === 'dashboard') {
+                    // CORRECCIÓN: Usar los IDs correctos de los elementos de la vista.
+                    if (id === 'dashboard-view') {
                         renderDashboard();
-                    } else if (id === 'schedule') {
+                    } else if (id === 'schedule-view') {
                         renderSchedule();
-                    } else if (id === 'calendar') {
+                    } else if (id === 'calendar-view') {
                         renderCalendar();
-                    } else if (id === 'settings') {
+                    } else if (id === 'settings-view') {
                         renderSettings();
                     }
                 }
@@ -581,7 +582,8 @@ document.addEventListener('DOMContentLoaded', () => {
         class Particle {
             constructor() {
                 this.angle = Math.random() * Math.PI * 2;
-                this.radius = 160; // Start at the edge of the timer
+                // CORRECCIÓN: Ajustar el radio inicial para que coincida mejor con el círculo visual.
+                this.radius = 155; 
                 this.speed = Math.random() * 0.5 + 0.1;
                 this.size = Math.random() * 2 + 1;
                 this.color = state.zenSettings.color;
@@ -645,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttons.startZenSession.addEventListener('click', () => { state.currentZenTaskId = state.selectedTaskId; startZenMode(); });
     buttons.dashboardZen.addEventListener('click', () => { state.currentZenTaskId = null; startZenMode(); });
     buttons.exitZen.addEventListener('click', stopZenMode);
-    formElements.form.addEventListener('submit', async (e) => { e.preventDefault(); const title = formElements.title.value.trim(); if (!title) return; const tags = formElements.tags.value.split(',').map(t => t.trim()).filter(t => t); const commonData = { title, description: formElements.description.value.trim(), dueDate: formElements.dueDate.value, priority: formElements.priority.value, tags, subtasks: state.tempSubtasks.map((st, i) => ({ id: st.id || `sub-${Date.now()}-${i}`, text: st.text, completed: st.completed || false })) }; if (state.selectedTaskId) { const taskIndex = state.tasks.findIndex(t => t.id === state.selectedTaskId); if (taskIndex > -1) { const originalTask = state.tasks[taskIndex]; state.tasks[taskIndex] = { ...originalTask, ...commonData, completed: commonData.subtasks.length > 0 ? commonData.subtasks.every(st => st.completed) : originalTask.completed, completedAt: (commonData.subtasks.length > 0 && commonData.subtasks.every(st => st.completed)) ? new Date().toISOString() : null }; } } else { state.tasks.push({ ...commonData, id: `task-${Date.now()}`, createdAt: new Date().toISOString(), completed: false, completedAt: null }); } await dataService.saveData(state); if (state.selectedTaskId) { renderTaskDetails(); } else { renderDashboard(); hideHiddenView('form'); } });
+    formElements.form.addEventListener('submit', async (e) => { e.preventDefault(); const title = formElements.title.value.trim(); if (!title) return; const tags = formElements.tags.value.split(',').map(t => t.trim()).filter(t => t); const commonData = { title, description: formElements.description.value.trim(), dueDate: formElements.dueDate.value, priority: formElements.priority.value, tags, subtasks: state.tempSubtasks.map((st, i) => ({ id: st.id || `sub-${Date.now()}-${i}`, text: st.text, completed: st.completed || false })) }; if (state.selectedTaskId) { const taskIndex = state.tasks.findIndex(t => t.id === state.selectedTaskId); if (taskIndex > -1) { const originalTask = state.tasks[taskIndex]; state.tasks[taskIndex] = { ...originalTask, ...commonData, completed: commonData.subtasks.length > 0 ? commonData.subtasks.every(st => st.completed) : originalTask.completed, completedAt: (commonData.subtasks.length > 0 && commonData.subtasks.every(st => st.completed)) ? new Date().toISOString() : null }; } } else { state.tasks.push({ ...commonData, id: `task-${Date.now()}`, createdAt: new Date().toISOString(), completed: false, completedAt: null }); } await dataService.saveData(state); hideHiddenView('form'); if (views.details.classList.contains('active')) { renderTaskDetails(); } else { renderDashboard(); } });
     
     buttons.addSubject.addEventListener('click', openNewSubjectForm);
     buttons.cancelSubjectForm.addEventListener('click', () => {
@@ -720,8 +722,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- INICIALIZACIÓN ---
     async function initApp() {
-        setupScrollNavigation();
+        // CORRECCIÓN: Llamar a renderDashboard explícitamente al inicio para asegurar que la primera vista se cargue.
         renderDashboard(); 
+        setupScrollNavigation();
         views.dashboard.scrollIntoView();
         await checkAchievements();
     }
@@ -732,9 +735,11 @@ document.addEventListener('DOMContentLoaded', () => {
         renderZenSoundControls();
         if (state.userName) {
             mainAppUI.style.display = 'block';
+            views.setup.style.display = 'none';
             initApp();
         } else {
             views.setup.style.display = 'flex';
+            mainAppUI.style.display = 'none';
         }
     }
     

@@ -3,33 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FOCO - Versión Final</title>
+    <title>F.O.C.O - Versión Final</title>
     
     <!-- Metadatos para PWA -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0C0A1A">
+    <meta name="theme-color" content="#0A0A14">
     <link rel="apple-touch-icon" href="icons/icon-192x192.png">
     
     <!-- Scripts y Fuentes Externas -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Hoja de Estilos Propia -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Vista de Configuración Inicial -->
-    <section id="setup-view">
-        <div class="w-full max-w-xl text-center">
-            <h1 class="font-heading text-4xl md:text-6xl uppercase mb-4 text-white">¡Bienvenido/a a FOCO by VitreumStudios!</h1>
-            <p class="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-secondary">Para empezar, dinos cómo te llamas.</p>
-            <form id="setup-form" class="w-full max-w-sm mx-auto">
-                <input type="text" id="username-input" class="input-field text-center text-2xl mb-8" placeholder="Escribe tu nombre aquí..." required>
-                <button type="submit" class="btn btn-primary w-full text-xl md:text-2xl">COMENZAR</button>
-            </form>
+    <!-- Contenedor del Onboarding -->
+    <section id="onboarding-container">
+        <div id="onboarding-ripple"></div>
+        <div class="onboarding-glass-pane">
+            <!-- Paso 1: Nombre -->
+            <div id="setup-step-1" class="onboarding-step active">
+                <div class="w-full max-w-xl text-center">
+                    <h1 class="font-heading text-4xl md:text-6xl uppercase mb-4 text-white">Bienvenido a F.O.C.O</h1>
+                    <p class="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-secondary">Para empezar, dinos cómo te llamas.</p>
+                    <form id="setup-form" class="w-full max-w-sm mx-auto">
+                        <input type="text" id="username-input" class="input-field text-center text-2xl mb-8" placeholder="Escribe tu nombre aquí..." required>
+                        <button type="submit" class="btn btn-primary w-full text-xl md:text-2xl">Siguiente</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Paso 2: Compromiso -->
+            <div id="setup-step-2" class="onboarding-step">
+                <div class="w-full max-w-2xl text-center">
+                    <h2 class="font-heading text-3xl md:text-4xl uppercase mb-6">Mi Compromiso</h2>
+                    <p class="text-lg md:text-xl mb-8 text-secondary">Yo, <span id="commitment-name" class="font-bold text-white"></span>, me comprometo a utilizar F.O.C.O como mi herramienta para cultivar la disciplina, gestionar mi tiempo con intención y alcanzar mis metas. Cada tarea completada es un paso hacia mi mejor versión.</p>
+                    <p class="text-base mb-10 text-secondary">Mantén presionado para sellar tu compromiso.</p>
+                    <button id="fingerprint-btn" class="fingerprint-scanner">
+                        <svg class="fingerprint-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12a2 2 0 1 0 4 0v-2a6 6 0 1 0-8 5.66"/><path d="M12 12a2 2 0 1 0 4 0v-2a6 6 0 1 0-8 5.66"/><path d="M12 2a4 4 0 1 0 8 0"/><path d="M18 12h.01"/><path d="M6 12h.01"/><path d="M6 18h.01"/><path d="M21.99 12.5a6.5 6.5 0 0 0-11.49 4.49"/><path d="M3.5 14.5a6.5 6.5 0 0 0 11.49 4.49"/></svg>
+                        <div class="fingerprint-circle"></div>
+                    </button>
+                </div>
+            </div>
+            <!-- Paso 3: Tutorial -->
+            <div id="setup-step-3" class="onboarding-step tutorial-step">
+                <h2 class="font-heading text-3xl md:text-4xl uppercase mb-8 text-center">Un Vistazo Rápido</h2>
+                <div class="tutorial-card-stack">
+                    <div class="tutorial-card" id="tutorial-card-4">
+                        <h3 class="font-heading text-2xl uppercase mb-2">Ajustes</h3>
+                        <p>Personaliza tu experiencia, colores, fondos y gestiona tus datos.</p>
+                    </div>
+                    <div class="tutorial-card" id="tutorial-card-3">
+                        <h3 class="font-heading text-2xl uppercase mb-2">Calendario</h3>
+                        <p>Visualiza tus tareas en una vista mensual y planifica a futuro.</p>
+                    </div>
+                    <div class="tutorial-card" id="tutorial-card-2">
+                        <h3 class="font-heading text-2xl uppercase mb-2">Horario</h3>
+                        <p>Organiza tus clases y materias. ¡Lleva un registro de tus calificaciones!</p>
+                    </div>
+                    <div class="tutorial-card" id="tutorial-card-1">
+                        <h3 class="font-heading text-2xl uppercase mb-2">Inicio</h3>
+                        <p>Tu centro de mando. Visualiza tus tareas, rachas y entra en modo Zen.</p>
+                    </div>
+                </div>
+                <button id="start-app-btn" class="btn btn-primary text-xl mt-8">¡Entendido!</button>
+            </div>
         </div>
     </section>
 
@@ -99,9 +140,62 @@
             <!-- Vista: Ajustes -->
             <section id="settings-view" data-nav-name="Ajustes" class="view">
                 <div class="view-content">
-                    <div class="glass-pane p-4 md:p-6 w-full space-y-8"><h1 class="font-heading text-3xl uppercase">Configuración</h1><div id="zen-settings-section"><h2 class="font-heading text-2xl uppercase mb-4">Modo Zen</h2><div class="space-y-4"><div class="grid grid-cols-1 md:grid-cols-3 gap-4"><div><label for="zen-pomodoro-duration" class="font-bold block mb-2">Enfoque (min)</label><input type="number" id="zen-pomodoro-duration" class="input-field" min="1"></div><div><label for="zen-short-break-duration" class="font-bold block mb-2">Descanso Corto (min)</label><input type="number" id="zen-short-break-duration" class="input-field" min="1"></div><div><label for="zen-long-break-duration" class="font-bold block mb-2">Descanso Largo (min)</label><input type="number" id="zen-long-break-duration" class="input-field" min="1"></div></div></div></div><div id="appearance-section"><h2 class="font-heading text-2xl uppercase mb-4">Apariencia</h2><div class="space-y-4"><div><label for="color-picker" class="font-bold block mb-2">Color de Acento</label><input type="color" id="color-picker" class="input-field h-12"></div><div><label for="wallpaper-url-input" class="font-bold block mb-2">Fondo desde URL</label><div class="flex gap-2"><input type="text" id="wallpaper-url-input" class="input-field flex-1" placeholder="https://..."><button id="save-wallpaper-url-btn" class="btn">Guardar</button></div></div><div><label for="wallpaper-file-input" class="font-bold block mb-2">Fondo desde archivo</label><input type="file" id="wallpaper-file-input" accept="image/*" class="input-field"></div><button id="reset-wallpaper-btn" class="w-full md:w-auto btn">Restaurar fondo</button></div></div><div><h2 class="font-heading text-2xl uppercase mb-4">Copia de Seguridad</h2><div class="flex flex-col md:flex-row gap-4"><button id="export-btn" class="flex-1 btn">Exportar</button><button id="import-btn" class="flex-1 btn">Importar</button></div><input type="file" id="import-file-input" accept=".foco,.json" class="hidden"></div><div><h2 class="font-heading text-2xl uppercase mb-4" style="color: var(--danger-color);">Zona de Peligro</h2><button id="reset-app-btn" class="w-full btn btn-danger font-bold text-lg">Reiniciar Aplicación</button></div></div>
+                    <h1 class="font-heading text-4xl md:text-5xl uppercase mb-8 text-on-bg">Configuración</h1>
+                    
+                    <!-- Sección Modo Zen -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"></path><path d="M12 6v6l4 2"></path></svg>
+                            <h2 class="font-heading text-2xl uppercase">Modo Zen</h2>
+                        </div>
+                        <div class="settings-card-content">
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div><label for="zen-pomodoro-duration" class="font-bold block mb-2 text-sm">Enfoque (min)</label><input type="number" id="zen-pomodoro-duration" class="input-field" min="1"></div>
+                                <div><label for="zen-short-break-duration" class="font-bold block mb-2 text-sm">Descanso Corto (min)</label><input type="number" id="zen-short-break-duration" class="input-field" min="1"></div>
+                                <div><label for="zen-long-break-duration" class="font-bold block mb-2 text-sm">Descanso Largo (min)</label><input type="number" id="zen-long-break-duration" class="input-field" min="1"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección Apariencia -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z"></path></svg>
+                            <h2 class="font-heading text-2xl uppercase">Apariencia</h2>
+                        </div>
+                        <div class="settings-card-content space-y-6">
+                            <div><label for="color-picker" class="font-bold block mb-2">Color de Acento</label><input type="color" id="color-picker" class="input-field h-12 p-1"></div>
+                            <div><label for="wallpaper-url-input" class="font-bold block mb-2">Fondo desde URL</label><div class="flex gap-2"><input type="text" id="wallpaper-url-input" class="input-field flex-1" placeholder="https://..."><button id="save-wallpaper-url-btn" class="btn">Guardar</button></div></div>
+                            <div><label for="wallpaper-file-input" class="font-bold block mb-2">Fondo desde archivo</label><input type="file" id="wallpaper-file-input" accept="image/*" class="input-field"></div>
+                            <button id="reset-wallpaper-btn" class="w-full md:w-auto btn">Restaurar fondo</button>
+                        </div>
+                    </div>
+
+                    <!-- Sección Datos -->
+                    <div class="settings-card">
+                        <div class="settings-card-header">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <h2 class="font-heading text-2xl uppercase">Datos</h2>
+                        </div>
+                        <div class="settings-card-content">
+                            <div class="flex flex-col md:flex-row gap-4"><button id="export-btn" class="flex-1 btn">Exportar</button><button id="import-btn" class="flex-1 btn">Importar</button></div>
+                            <input type="file" id="import-file-input" accept=".foco,.json" class="hidden">
+                        </div>
+                    </div>
+
+                    <!-- Sección Peligro -->
+                    <div class="settings-card border-danger-color">
+                        <div class="settings-card-header text-danger-color">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            <h2 class="font-heading text-2xl uppercase">Zona de Peligro</h2>
+                        </div>
+                        <div class="settings-card-content">
+                             <p class="text-secondary mb-4 text-sm">Esta acción no se puede deshacer. Se borrarán todas tus tareas, horarios y configuraciones permanentemente.</p>
+                            <button id="reset-app-btn" class="w-full btn btn-danger font-bold text-lg">Reiniciar Aplicación</button>
+                        </div>
+                    </div>
                 </div>
-                 <a href="#dashboard-view" class="scroll-arrow"><span>Inicio</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg);"><path d="m7 10 5 5 5-5"/></svg></a>
+                <a href="#dashboard-view" class="scroll-arrow"><span>Inicio</span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="transform: rotate(180deg);"><path d="m7 10 5 5 5-5"/></svg></a>
             </section>
         </main>
         
